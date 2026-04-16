@@ -1,7 +1,7 @@
 # Dependencies
 node_modules/
 
-# Environment variables (contains secrets)
+# Local config (contains secrets — stored in ~/.opusmax-proxy/)
 .env
 .env.local
 .env.*.local

@@ -5,16 +5,13 @@
  * Configure once, use across all Claude-compatible tools.
  */
 
-require('dotenv').config();
-
 const express = require('express');
 const cors = require('cors');
-const http = require('http');
 
 const app = express();
 
 // ============================================================
-// CONFIGURATION — Set in .env file
+// CONFIGURATION — Set via CLI or environment
 // ============================================================
 
 const OPUSMAX_API_KEY = process.env.OPUSMAX_API_KEY;
@@ -23,7 +20,7 @@ const PORT = parseInt(process.env.PORT, 10) || 8080;
 
 // Validate required config
 if (!OPUSMAX_API_KEY) {
-  console.error('❌ OPUSMAX_API_KEY is required. Set it in your .env file.');
+  console.error('❌ OPUSMAX_API_KEY is required. Run `opusmax-proxy --configure` to set up.');
   process.exit(1);
 }
 

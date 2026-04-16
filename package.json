@@ -1,15 +1,32 @@
 {
   "name": "opusmax-proxy",
   "version": "1.0.0",
-  "description": "Local proxy gateway for OpusMax - translates Claude tool requests to OpusMax API format",
-  "main": "proxy.js",
+  "description": "Local proxy gateway for OpusMax - translates Claude API requests to OpusMax with a single command",
+  "main": "src/proxy.js",
+  "bin": {
+    "opusmax-proxy": "./src/cli.js"
+  },
+  "preferGlobal": true,
   "scripts": {
-    "start": "node proxy.js"
+    "start": "node src/cli.js",
+    "dev": "node src/proxy.js"
+  },
+  "keywords": [
+    "opusmax",
+    "claude",
+    "proxy",
+    "gateway",
+    "anthropic",
+    "openai"
+  ],
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "http-proxy-middleware": "^2.0.6",
-    "dotenv": "^16.4.5"
-  }
+    "cors": "^2.8.5"
+  },
+  "files": [
+    "src/"
+  ]
 }

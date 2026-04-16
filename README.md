@@ -37,36 +37,42 @@ This is ideal for:
 - Presenters who want AI-generated slides in PowerPoint
 - Anyone with an OpusMax account who wants Claude in Office without paying for Copilot
 
+## Install
+
+```bash
+npm install -g opusmax-proxy
+```
+
+That's it — no cloning, no manual config files.
+
 ## Setup
 
-### 1. Install
+On first run, the CLI will prompt you for your OpusMax credentials:
 
 ```bash
-npm install
+opusmax-proxy
 ```
 
-### 2. Configure
+```
+OpusMax Base URL [https://api.opusmax.pro]:
+OpusMax API Key: your-api-key-here
+Local Port [8080]:
 
-Copy the example env file and add your OpusMax credentials:
+Config saved to: ~/.opusmax-proxy/config.json
+```
+
+Your credentials are stored locally in `~/.opusmax-proxy/config.json` and never shared.
+
+## Usage
 
 ```bash
-cp .env.example .env
+opusmax-proxy           # Start proxy (uses saved config)
+opusmax-proxy -c       # Reconfigure (change API key or URL)
+opusmax-proxy --port N  # Override port
+opusmax-proxy -h       # Show help
 ```
 
-Edit `.env`:
-```
-OPUSMAX_API_KEY=your-opusmax-api-key
-OPUSMAX_BASE=https://api.opusmax.pro
-PORT=8080
-```
-
-### 3. Start
-
-```bash
-npm start
-```
-
-### 4. Configure Your Office Add-in
+## Configure Your Office Add-in
 
 Each Claude add-in for Office has settings to point to a custom API. Configure it to use:
 
@@ -99,12 +105,12 @@ Ctrl+C
 
 ## Requirements
 
-- Node.js 18+ (for native `fetch`)
+- Node.js 18+
 - OpusMax account with API access
 - Claude add-in for Office that supports custom endpoints
 
 ## Notes
 
-- Your API key is stored locally in `.env` and never shared
+- Your API key is stored locally in `~/.opusmax-proxy/config.json` and never shared
 - The proxy runs entirely on your machine
 - Streaming must be enabled in your add-in settings for real-time responses
