@@ -1,0 +1,15 @@
+{
+  "name": "opusmax-proxy",
+  "version": "1.0.0",
+  "description": "Local proxy gateway for OpusMax - translates Claude tool requests to OpusMax API format",
+  "main": "proxy.js",
+  "scripts": {
+    "start": "node proxy.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "http-proxy-middleware": "^2.0.6",
+    "dotenv": "^16.4.5"
+  }
+}
