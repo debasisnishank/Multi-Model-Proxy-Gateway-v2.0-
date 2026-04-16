@@ -1,40 +1,110 @@
-# OpusMax Local Proxy Server
+# OpusMax Local Proxy Gateway
 
-A lightweight local gateway that translates requests from Claude-compatible tools
-and forwards them to OpusMax with the correct headers and body format.
+A lightweight local proxy that lets you use **OpusMax** as the backend for Claude integrations in Microsoft Office (Word, Excel, PowerPoint) and any other Claude-compatible tool — without needing an official Anthropic API subscription.
 
-## How it works
+## How It Works
 
-Claude for Office (or any Claude-compatible tool)
-    → localhost:8080/v1/messages (this proxy)
-    → OpusMax api.opusmax.pro/v1/messages (with correct auth)
+```
+Claude Add-in (Word/Excel/PowerPoint)
+    → localhost:8080  (this proxy)
+    → OpusMax API     (your OpusMax account)
+```
+
+The proxy translates standard Claude API requests into OpusMax format with proper authentication — no code changes needed on the Office side.
+
+## Why Use This?
+
+- **No Anthropic subscription needed** — Use your existing OpusMax account
+- **Office Claude Add-ins** — Works with any add-in that supports custom API endpoints
+- **Stream responses** — Real-time streaming for a native chat experience
+- **Multi-model support** — Switch between Opus 4.6, Sonnet 4.5, and Haiku 4.5
+- **Local testing** — Develop and test Claude integrations without touching production APIs
+
+## Use Case: Claude in Microsoft Office Without a Copilot License
+
+Microsoft 365 Copilot requires a **$30/user/month** license. But if you have an OpusMax account (which costs a fraction of that), you can get similar AI assistance in Word, Excel, and PowerPoint using third-party Claude add-ins.
+
+With this proxy:
+
+1. You write a document in Word or build a spreadsheet in Excel
+2. A Claude add-in sends your request to `http://localhost:8080`
+3. The proxy forwards it to OpusMax using your account
+4. You get Claude's AI capabilities directly in your Office documents
+
+This is ideal for:
+- Writers who want AI drafting and editing in Word
+- Analysts who want AI-powered formulas and insights in Excel
+- Presenters who want AI-generated slides in PowerPoint
+- Anyone with an OpusMax account who wants Claude in Office without paying for Copilot
 
 ## Setup
 
-1. Install dependencies:
-   npm install
+### 1. Install
 
-2. Configure your OpusMax API key:
-   - Edit proxy.js and replace OPUSMAX_API_KEY with your key
-   - Or set environment variable: export OPUSMAX_API_KEY="sk-ant-opm-..."
+```bash
+npm install
+```
 
-3. Start the server:
-   node proxy.js
+### 2. Configure
 
-4. The proxy runs at:
-   http://localhost:8080/v1/messages
+Copy the example env file and add your OpusMax credentials:
 
-## Claude for Office Settings
+```bash
+cp .env.example .env
+```
 
-Gateway URL:  http://localhost:8080
-Token:        (leave blank, or any dummy value - auth is handled server-side)
-Auth Header:  (leave blank)
-API Format:   anthropic
+Edit `.env`:
+```
+OPUSMAX_API_KEY=your-opusmax-api-key
+OPUSMAX_BASE=https://api.opusmax.pro
+PORT=8080
+```
+
+### 3. Start
+
+```bash
+npm start
+```
+
+### 4. Configure Your Office Add-in
+
+Each Claude add-in for Office has settings to point to a custom API. Configure it to use:
+
+- **Gateway URL:** `http://localhost:8080`
+- **Token/Key:** Leave blank (auth is handled server-side)
+- **API Format:** `anthropic` (for Claude Messages API)
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check |
+| `/` | GET | Service info |
+| `/v1/models` | GET | List available models |
+| `/v1/models/info` | GET | Model details by tier |
+| `/v1/messages` | POST | Anthropic format (streaming supported) |
+| `/v1/chat/completions` | POST | OpenAI format (streaming supported) |
 
 ## Health Check
 
+```bash
 curl http://localhost:8080/health
+```
 
 ## Stop
 
+```bash
 Ctrl+C
+```
+
+## Requirements
+
+- Node.js 18+ (for native `fetch`)
+- OpusMax account with API access
+- Claude add-in for Office that supports custom endpoints
+
+## Notes
+
+- Your API key is stored locally in `.env` and never shared
+- The proxy runs entirely on your machine
+- Streaming must be enabled in your add-in settings for real-time responses
